@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+
+    <title>HHIT Test Suite</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="fragments/sidebar"></ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div class="d-flex flex-column" id="content-wrapper">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="fragments/topbar :: topbar"></nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="offset-sm-3 d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Create Data Validation Test</h1>
+                </div>
+
+                <!-- Content Row -->
+                <form action="#" class="user" method="post" th:action="@{/create-data-validation-test}"
+                      th:object="${test}">
+                    <div class="form-group row">
+                        <div class="offset-sm-3 col-sm-6">
+                            <input class="form-control form-control-user" placeholder="Test Name" th:field="*{testName}"
+                                   type="text">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="offset-sm-3 col-sm-6">
+                            <input class="form-control form-control-user"
+                                   placeholder="Test Priority Order (Ascending 0,1,2,3...)" th:field="*{priorityOrder}"
+                                   type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="offset-sm-3 col-sm-6">
+                            <input class="form-control form-control-user" placeholder="Test URL" th:field="*{testUrl}"
+                                   type="text">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="offset-sm-3 col-sm-6">
+                            <input class="form-control form-control-user" placeholder="Test Request Method (POST/GET)"
+                                   th:field="*{testRequestMethod}" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="offset-sm-3 col-sm-6">
+                            <textarea class="form-control" placeholder="Request Body" rows="5"
+                                      th:field="*{testRequestBody}"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="offset-sm-3 col-sm-6">
+                            <input class="form-control form-control-user" placeholder="Oracle Table Name"
+                                   th:field="*{testOracleTable}" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="offset-sm-3 col-sm-6">
+                            <input class="form-control form-control-user" placeholder="JSON Array Key"
+                                   th:field="*{testJSONArrayKey}" type="text">
+                        </div>
+                    </div>
+                    <span id="addFormElement">
+                        <div class="form-group row">
+                            <div class="offset-sm-3 col-sm-6">
+                                <h6>Column - Key Pair 1</h6>
+                                <input class="form-control form-control-user" name="assertionColumn[]" placeholder="Assertion Column Name" type="text">
+                                <input class="form-control form-control-user" name="assertionKey[]" placeholder="Assertion JSON Key" type="text">
+                            </div>
+                        </div>
+                    </span>
+                    <div class="form-group row">
+                        <div class="offset-sm-3 col-sm-3">
+                            <button id="add_button" class="btn btn-primary btn-user btn-block"><i class="fa fa-plus"></i> Add New Assertion</button>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="form-group row">
+                        <div class="offset-sm-3 col-sm-6">
+                            <input class="btn btn-primary btn-user btn-block" type="submit" value="Create">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <div th:replace="fragments/footer"></div>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="fragments/logoutmodal"></div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="vendor/chart.js/Chart.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="js/demo/chart-area-demo.js"></script>
+<script src="js/demo/chart-pie-demo.js"></script>
+<script>
+    var counter = 2;
+    function addFormElement(event) {
+        event.preventDefault();
+        $("#addFormElement").append('' +
+            '                        <div class="form-group row">\n' +
+            '                            <div class="offset-sm-3 col-sm-6">\n' +
+            '                                <h6>Column - Key Pair '+counter+'</h6>\n' +
+            '                                <input class="form-control form-control-user" name="assertionColumn[]" placeholder="Assertion Column Name" type="text">\n' +
+            '                                <input class="form-control form-control-user" name="assertionKey[]" placeholder="Assertion JSON Key" type="text">\n' +
+            '                            </div>\n' +
+            '                        </div>\n');
+        counter++;
+    }
+    //Listener
+    document.getElementById("add_button").addEventListener("click", addFormElement );
+</script>
+</body>
+
+</html>

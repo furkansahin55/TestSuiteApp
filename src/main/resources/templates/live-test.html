@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+
+    <title>HHIT Test Suite</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="fragments/sidebar"></ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div class="d-flex flex-column" id="content-wrapper">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="fragments/topbar :: topbar"></nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Current Test Batch</h1>
+                </div>
+
+
+                <!-- Content Row -->
+                <div class="row">
+                    <div class="col-lg-12 mb-4">
+
+                        <!-- Project Card Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Test Batch</h6>
+                            </div>
+                            <div class="card-body">
+                                <h5 class=" font-weight-bold">Test Batch is Running</h5>
+                                <div class="progress" style="height: 25px">
+                                    <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="0"
+                                         class=" bg-success progress-bar  progress-bar-striped active" id="dynamic"
+                                         role="progressbar" style="width: 0%">
+                                        <span id="current-progress"></span>
+                                    </div>
+                                </div>
+                                <br>
+                                <h3 class="text-black-50">Executed Test Count : <span id="executed-test-count">0</span>
+                                    <span class="float-right">Total Count : <span id="total-test-count">8</span> </span>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Test Results</h1>
+                </div>
+
+
+                <!-- Color System -->
+                <div class="row" id="test-carts"></div>
+
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <div th:replace="fragments/footer"></div>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div th:replace="fragments/logoutmodal"></div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<script>
+    //Server address
+    var address = "http://" + window.location.hostname + ":8080";
+
+    //Set total test count for once
+    fetch(address + "/get-total-test-count")
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (resultJson) {
+            $("#total-test-count").text(resultJson.value)
+        });
+
+    //Interval Function
+    function intervalFunction() {
+        updateProgressBar();
+        updateExecutedTestCount();
+        updateTestResultCarts();
+    }
+
+    //Initial Run
+    intervalFunction();
+
+    //Set interval properties
+    var interval;
+    $(function () {
+        interval = setInterval(intervalFunction, 1000);
+    });
+
+    function updateProgressBar() {
+        fetch(address + "/get-progress-bar")
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (resultJson) {
+                var current_progress = resultJson.value;
+                $("#dynamic")
+                    .css("width", current_progress + "%")
+                    .attr("aria-valuenow", current_progress)
+                    .text(current_progress + "% Complete");
+
+                //Not update anymore if progress bar 100.
+                if (current_progress >= 100) clearInterval(interval);
+
+            });
+
+    }
+
+    function updateExecutedTestCount() {
+        fetch(address + "/get-executed-test-count")
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (resultJson) {
+                $("#executed-test-count").text(resultJson.value)
+            });
+    }
+
+    function updateTestResultCarts() {
+        fetch(address + "/get-test-results")
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (resultJson) {
+                //Clear all cards
+                $("#test-carts").html("");
+
+                //Iterate all test results and append cards
+                for (var j = 0; j < resultJson.length; j++) {
+                    //Get status of test and create style variable
+                    var status = resultJson[j]["status"];
+                    var style = "bg-success";
+                    var testName = resultJson[j]["testName"];
+                    if (status !== "PASSED") style = "bg-danger";
+                    var testId = resultJson[j]["id"];
+                    $("#test-carts").append('<div class="col-lg-4 mb-4">\n' +
+                        '                      <div class="card ' + style + ' text-white shadow">\n' +
+                        '                        <div class="card-body">\n' +
+                        '                          ' + testName + '<span class="float-right">' + status + '</span>\n' +
+                        '                          <div class="text-white-50 small"><a href="test-result/' + testId + '">View Report</a></div>\n' +
+                        '                        </div>\n' +
+                        '                      </div>\n' +
+                        '                    </div>')
+                }
+            });
+    }
+</script>
+
+</body>
+
+</html>

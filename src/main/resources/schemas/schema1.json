@@ -1,0 +1,121 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "statusCode",
+    "responseStatus",
+    "responseDescription",
+    "userID",
+    "requestSystem",
+    "numberCount"
+  ],
+  "properties": {
+    "statusCode": {
+      "$id": "#/properties/statusCode",
+      "type": "integer",
+      "title": "The Statuscode Schema",
+      "default": 0
+    },
+    "responseStatus": {
+      "$id": "#/properties/responseStatus",
+      "type": "string",
+      "title": "The Responsestatus Schema",
+      "default": "",
+      "pattern": "^(.*)$"
+    },
+    "responseDescription": {
+      "$id": "#/properties/responseDescription",
+      "type": "string",
+      "title": "The Responsedescription Schema",
+      "default": "",
+      "pattern": "^(.*)$"
+    },
+    "userID": {
+      "$id": "#/properties/userID",
+      "type": "string",
+      "title": "The Userid Schema",
+      "default": "",
+      "pattern": "^(.*)$"
+    },
+    "requestSystem": {
+      "$id": "#/properties/requestSystem",
+      "type": "string",
+      "title": "The Requestsystem Schema",
+      "default": "",
+      "pattern": "^(.*)$"
+    },
+    "numberCount": {
+      "$id": "#/properties/numberCount",
+      "type": "array",
+      "title": "The Numbercount Schema",
+      "default": null,
+      "minItems": 1,
+      "items": {
+        "$id": "#/properties/numberCount/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "id",
+          "numberType",
+          "numberStatus"
+        ],
+        "properties": {
+          "id": {
+            "$id": "#/properties/numberCount/items/properties/id",
+            "type": "integer",
+            "title": "The Id Schema",
+            "default": 0
+          },
+          "numberType": {
+            "$id": "#/properties/numberCount/items/properties/numberType",
+            "type": "string",
+            "title": "The Numbertype Schema",
+            "default": "",
+            "pattern": "^(.*)$"
+          },
+          "numberStatus": {
+            "$id": "#/properties/numberCount/items/properties/numberStatus",
+            "type": "array",
+            "title": "The Numberstatus Schema",
+            "default": null,
+            "minItems": 1,
+            "items": {
+              "$id": "#/properties/numberCount/items/properties/numberStatus/items",
+              "type": "object",
+              "title": "The Items Schema",
+              "required": [
+                "id",
+                "statusValue",
+                "count"
+              ],
+              "properties": {
+                "id": {
+                  "$id": "#/properties/numberCount/items/properties/numberStatus/items/properties/id",
+                  "type": "integer",
+                  "title": "The Id Schema",
+                  "default": 0
+                },
+                "statusValue": {
+                  "$id": "#/properties/numberCount/items/properties/numberStatus/items/properties/statusValue",
+                  "type": "string",
+                  "title": "The Statusvalue Schema",
+                  "default": "",
+                  "pattern": "^(.*)$"
+                },
+                "count": {
+                  "$id": "#/properties/numberCount/items/properties/numberStatus/items/properties/count",
+                  "type": "integer",
+                  "title": "The Count Schema",
+                  "default": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
